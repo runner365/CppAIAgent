@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a6e35dc2-c239-47bc-acc2-540df102ae91}</ProjectGuid>
+    <RootNamespace>CppAIAgent</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)src;$(SolutionDir)src\net;$(SolutionDir)src\net\tcp;$(SolutionDir)src\net\http;$(SolutionDir)src\utils;$(SolutionDir)src\opencv;$(SolutionDir)win_3rdparty\libuv\include;$(SolutionDir)win_3rdparty\openssl\include;$(SolutionDir)src\aiagent;$(SolutionDir)win_3rdparty\opencv\build\include;$(SolutionDir)win_3rdparty\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)win_3rdparty\openssl\lib;$(SolutionDir)win_3rdparty\libuv\lib;$(SolutionDir)win_3rdparty\opencv\build\win\vc16\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>uv.lib;libssl.lib;libcrypto.lib;ws2_32.lib;opencv_world4120d.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\aiagent\function_tools.h" />
+    <ClInclude Include="src\aiagent\llmclient.h" />
+    <ClInclude Include="src\aiagent\llm_http_client.h" />
+    <ClInclude Include="src\aiagent\llm_info.h" />
+    <ClInclude Include="src\aiagent\llm_tool.h" />
+    <ClInclude Include="src\net\http\http_client.hpp" />
+    <ClInclude Include="src\net\http\http_common.hpp" />
+    <ClInclude Include="src\net\http\http_server.hpp" />
+    <ClInclude Include="src\net\http\http_session.hpp" />
+    <ClInclude Include="src\net\tcp\ssl_client.hpp" />
+    <ClInclude Include="src\net\tcp\ssl_pub.hpp" />
+    <ClInclude Include="src\net\tcp\ssl_server.hpp" />
+    <ClInclude Include="src\net\tcp\tcp_client.hpp" />
+    <ClInclude Include="src\net\tcp\tcp_pub.hpp" />
+    <ClInclude Include="src\net\tcp\tcp_server.hpp" />
+    <ClInclude Include="src\net\tcp\tcp_session.hpp" />
+    <ClInclude Include="src\opencv\image_process.h" />
+    <ClInclude Include="src\utils\base64.hpp" />
+    <ClInclude Include="src\utils\byte_crypto.hpp" />
+    <ClInclude Include="src\utils\byte_stream.hpp" />
+    <ClInclude Include="src\utils\co_pub.hpp" />
+    <ClInclude Include="src\utils\crc.hpp" />
+    <ClInclude Include="src\utils\data_buffer.hpp" />
+    <ClInclude Include="src\utils\io_interface.hpp" />
+    <ClInclude Include="src\utils\ipaddress.hpp" />
+    <ClInclude Include="src\utils\json.hpp" />
+    <ClInclude Include="src\utils\logger.hpp" />
+    <ClInclude Include="src\utils\stream_statics.hpp" />
+    <ClInclude Include="src\utils\stringex.hpp" />
+    <ClInclude Include="src\utils\timeex.hpp" />
+    <ClInclude Include="src\utils\timer.hpp" />
+    <ClInclude Include="src\utils\url.h" />
+    <ClInclude Include="src\utils\uuid.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aiagent.cpp" />
+    <ClCompile Include="src\aiagent\function_tools.cpp" />
+    <ClCompile Include="src\aiagent\llmclient.cpp" />
+    <ClCompile Include="src\aiagent\llm_http_client.cpp" />
+    <ClCompile Include="src\aiagent\llm_info.cpp" />
+    <ClCompile Include="src\aiagent\llm_tool.cpp" />
+    <ClCompile Include="src\net\http\http_client.cpp" />
+    <ClCompile Include="src\net\http\http_server.cpp" />
+    <ClCompile Include="src\net\http\http_session.cpp" />
+    <ClCompile Include="src\opencv\image_process.cpp" />
+    <ClCompile Include="src\utils\base64.cpp" />
+    <ClCompile Include="src\utils\byte_crypto.cpp" />
+    <ClCompile Include="src\utils\crc.cpp" />
+    <ClCompile Include="src\utils\stringex.cpp" />
+    <ClCompile Include="src\utils\timeex.cpp" />
+    <ClCompile Include="src\utils\url.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

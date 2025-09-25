@@ -1,0 +1,78 @@
+# ==============================================
+# 1. Visual Studio 2022 IDE related files
+# ==============================================
+# VS project cache directory (contains local config, debug info, etc.)
+.vs/
+# Solution user options (stores personal IDE configurations)
+*.suo
+# IntelliSense database files (C++ code completion/analysis)
+*.sdf
+# Project user options (stores personal build configurations)
+*.user
+# Publish configuration cache
+*.pubxml.user
+# Test configuration cache
+*.vsctc
+# Team Explorer local cache
+*.vspscc
+# Build log files
+*.log
+
+
+# ==============================================
+# 2. C++ compilation output
+# ==============================================
+# Compilation intermediate files directory
+obj/
+# Compilation output directory
+bin/
+# Configuration-specific build outputs
+x64/
+x86/
+# Executable binary files
+*.exe
+# Static library files
+#*.lib
+# Dynamic link library files
+#*.dll
+# DLL export files
+*.exp
+# Debug symbol files
+*.pdb
+# Resource compilation intermediates
+*.res
+# Precompiled header files
+*.pch
+
+
+# ==============================================
+# 3. Excluded media files
+# ==============================================
+# Video files
+*.mp4
+# Audio files
+*.mp3
+
+
+# ==============================================
+# 4. Excluded image files
+# ==============================================
+*.jpg
+*.jpeg
+*.png
+
+
+# ==============================================
+# 5. General redundant files
+# ==============================================
+# Windows thumbnail cache
+Thumbs.db
+# Windows folder configuration
+Desktop.ini
+# Temporary files
+*.tmp
+*.temp
+# Backup files
+*.bak
+# Text editor swap files
+*.swp

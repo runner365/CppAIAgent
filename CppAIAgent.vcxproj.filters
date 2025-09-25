@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\utils">
+      <UniqueIdentifier>{635b2215-0f9a-4bfe-bfb0-28ab630c3c64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\net">
+      <UniqueIdentifier>{ed710125-8d50-44b2-9985-4f931b8e27fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\net\http">
+      <UniqueIdentifier>{c09265d1-424c-4d4c-a9d0-b06d6c08b2f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\net\tcp">
+      <UniqueIdentifier>{338e348b-12be-46c7-8654-2d3454aa606c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\llmclient">
+      <UniqueIdentifier>{dfe4f518-02f4-42c4-9957-20d2189d35fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\opencv">
+      <UniqueIdentifier>{bfd2019e-7302-4a79-a4a0-386c22e4431a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\net\tcp\ssl_client.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp\ssl_pub.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp\ssl_server.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp\tcp_client.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp\tcp_pub.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp\tcp_server.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp\tcp_session.hpp">
+      <Filter>源文件\net\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\http_client.hpp">
+      <Filter>源文件\net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\http_common.hpp">
+      <Filter>源文件\net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\http_server.hpp">
+      <Filter>源文件\net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\http\http_session.hpp">
+      <Filter>源文件\net\http</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\base64.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\byte_crypto.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\byte_stream.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\co_pub.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\crc.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\data_buffer.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\io_interface.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\ipaddress.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\json.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\logger.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\stream_statics.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\stringex.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\timeex.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\timer.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\uuid.hpp">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiagent\llm_http_client.h">
+      <Filter>源文件\llmclient</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiagent\llmclient.h">
+      <Filter>源文件\llmclient</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiagent\llm_info.h">
+      <Filter>源文件\llmclient</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\url.h">
+      <Filter>源文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiagent\llm_tool.h">
+      <Filter>源文件\llmclient</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aiagent\function_tools.h">
+      <Filter>源文件\llmclient</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opencv\image_process.h">
+      <Filter>源文件\opencv</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\net\http\http_client.cpp">
+      <Filter>源文件\net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\http_server.cpp">
+      <Filter>源文件\net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\http\http_session.cpp">
+      <Filter>源文件\net\http</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\base64.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\byte_crypto.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\crc.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\timeex.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="aiagent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiagent\llm_http_client.cpp">
+      <Filter>源文件\llmclient</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiagent\llmclient.cpp">
+      <Filter>源文件\llmclient</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiagent\llm_info.cpp">
+      <Filter>源文件\llmclient</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\url.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiagent\llm_tool.cpp">
+      <Filter>源文件\llmclient</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aiagent\function_tools.cpp">
+      <Filter>源文件\llmclient</Filter>
+    </ClCompile>
+    <ClCompile Include="src\opencv\image_process.cpp">
+      <Filter>源文件\opencv</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\stringex.cpp">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
