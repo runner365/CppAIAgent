@@ -33,6 +33,14 @@ CppAIAgent ÔÊĞíÓÃ»§Í¨¹ı×ÔÈ»ÓïÑÔÃèÊöÓë AI Agent ½»»¥£¬Agent »á×Ô¶¯½âÎöÓÃ»§ÊäÈë²¢Í
 3. ÔËĞĞ¿ÉÖ´ĞĞÎÄ¼ş£¬Í¨¹ı×ÔÈ»ÓïÑÔÊäÈëÓë Agent ½»»¥¡£
 4. Agent »á×Ô¶¯´¦ÀíÇëÇó²¢Íê³ÉÏàÓ¦µÄÍ¼Ïñ±à¼­²Ù×÷¡£
 
+### ÏÂÔØÇë×¢Òâ
+ÔÚ²Ö¿âÖĞÆôÓÃGit-LFS£º
+```
+git lfs install
+git clone https://github.com/runner365/CppAIAgent.git
+git lfs pull  # ÏÂÔØ´óÎÄ¼ş
+```
+
 ## ÒÀÀµÒªÇó
 
 - C++20 ±àÒëÆ÷£¨ÒÑÔÚ Visual Studio 2022 ²âÊÔ£©

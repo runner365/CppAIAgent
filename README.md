@@ -33,8 +33,15 @@ CppAIAgent enables users to interact with the AI agent using natural language de
 3. **Run the executable** and interact with the agent by entering natural language commands.
 4. The agent will process your request and perform the corresponding image editing operation.
 
+## Notice for Download
 
-## Requirements
+If the repository contains large files, please enable Git LFS before cloning:
+```
+```
+git lfs install
+git clone https://github.com/runner365/CppAIAgent.git
+git lfs pull  # pull large files
+```
 
 - C++20 compiler (tested with Visual Studio 2022)
 - OpenCV library
