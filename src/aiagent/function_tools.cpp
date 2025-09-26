@@ -327,3 +327,67 @@ ToolDefinition ApplySunGlassesFunctionDefinition() {
 	def.function = fd;
 	return def;
 }
+
+FunctionResult ConvertImage2CyberPunkStyleTool(std::map<std::string, LLMValue> input_args, Logger* logger) {
+	std::string src_url;
+
+	auto src_it = input_args.find("src_img");
+	if (src_it == input_args.end()) {
+		LogErrorf(logger, "Missing 'src_img' parameter");
+		FunctionResult error_result;
+		error_result.code = -1;
+		error_result.desc = "Missing 'src_img' parameter";
+		return error_result;
+	}
+	if (src_it->second.type != LLMValue::LLM_VALUE_STRING) {
+		LogErrorf(logger, "Invalid 'src_img' parameter type");
+		FunctionResult error_result;
+		error_result.code = -1;
+		error_result.desc = "Invalid 'src_img' parameter type";
+		return error_result;
+	}
+	src_url = src_it->second.string_value;
+	std::string src_dir;
+	std::string src_filename;
+	bool ret = GetSrcDirPathAndFilename(src_url, src_dir, src_filename);
+	if (!ret) {
+		LogErrorf(logger, "GetSrcDirPath failed for url: %s", src_url.c_str());
+		FunctionResult error_result;
+		error_result.code = -1;
+		error_result.desc = "GetSrcDirPath failed for 'src_img'";
+		return error_result;
+	}
+	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() % 100000) + ".jpg";
+	int proc_ret = ConvertImage2CyberPunkStyle(src_filename, dst_img_url, logger);
+	if (proc_ret < 0) {
+		LogErrorf(logger, "ConvertImage2CyberPunkStyle failed for src: %s", src_filename.c_str());
+		FunctionResult error_result;
+		error_result.code = -1;
+		error_result.desc = "ConvertImage2CyberPunkStyle failed";
+		return error_result;
+	}
+	FunctionResult result;
+	result.code = 0;
+	result.desc = "Success";
+	result.value.type = LLMValue::LLM_VALUE_STRING;
+	result.value.string_value = dst_img_url;
+	return result;
+}
+
+ToolDefinition ConvertImage2CyberPunkStyleFunctionDefinition() {
+	ToolDefinition def;
+	FunctionDefinition fd;
+	FunctionParameter params;
+	params.type = "object";
+	params.required_vec.push_back("src_img");
+	ParameterProperties src_img_prop;
+	src_img_prop.type = "string";
+	src_img_prop.description = "The source image file path";
+	params.properties["src_img"] = src_img_prop;
+	fd.name = "convert_image_to_cyberpunk_style";
+	fd.description = "Convert an image to cyberpunk style";
+	fd.parameters = params;
+	def.type = "function";
+	def.function = fd;
+	return def;
+}

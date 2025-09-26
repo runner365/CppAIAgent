@@ -25,5 +25,9 @@ ToolDefinition ApplyCartoonFilterFunctionDefinition();
 FunctionResult ApplySunGlassesTool(std::map<std::string, LLMValue>, Logger* logger);
 ToolDefinition ApplySunGlassesFunctionDefinition();
 
+// CyberPunk style function: Convert image to cyberpunk style
+FunctionResult ConvertImage2CyberPunkStyleTool(std::map<std::string, LLMValue>, Logger* logger);
+ToolDefinition ConvertImage2CyberPunkStyleFunctionDefinition();
+
 #endif
 

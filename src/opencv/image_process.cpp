@@ -194,3 +194,86 @@ int ApplySunGlasses(const std::string& inputPath, const std::string& outputPath,
 	}
 	return 0;
 }
+
+int ConvertImage2CyberPunkStyle(const std::string& inputPath, const std::string& outputPath, Logger* logger) {
+    try {
+        // Read the input image
+        cv::Mat img = cv::imread(inputPath);
+        if (img.empty()) {
+            LogErrorf(logger, "Unable to read image: %s:", inputPath.c_str());
+        }
+
+        // Resize image for consistent processing while maintaining aspect ratio
+        int maxDim = 1000;
+        int height = img.rows;
+        int width = img.cols;
+
+        if (std::max(height, width) > maxDim) {
+            double scale = static_cast<double>(maxDim) / std::max(height, width);
+            cv::resize(img, img, cv::Size(static_cast<int>(width * scale), static_cast<int>(height * scale)));
+        }
+
+        // Convert to HSV color space for easier color manipulation
+        cv::Mat hsv;
+        cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
+
+        // Split HSV channels and adjust saturation
+        std::vector<cv::Mat> hsvChannels;
+        cv::split(hsv, hsvChannels);
+
+        // Increase saturation for more vibrant colors
+        hsvChannels[1] += 50;
+        cv::normalize(hsvChannels[1], hsvChannels[1], 0, 255, cv::NORM_MINMAX);
+
+        // Merge HSV channels and convert back to BGR
+        cv::merge(hsvChannels, hsv);
+        cv::cvtColor(hsv, img, cv::COLOR_HSV2BGR);
+
+        // Split BGR channels to create cyberpunk color profile
+        std::vector<cv::Mat> bgrChannels;
+        cv::split(img, bgrChannels);
+
+        // Enhance blue channel (signature cyberpunk blue tone)
+        bgrChannels[0] += 30;
+        cv::normalize(bgrChannels[0], bgrChannels[0], 0, 255, cv::NORM_MINMAX);
+
+        // Reduce green channel to increase contrast
+        bgrChannels[1] -= 20;
+        cv::normalize(bgrChannels[1], bgrChannels[1], 0, 255, cv::NORM_MINMAX);
+
+        // Enhance red channel (neon effect)
+        bgrChannels[2] += 10;
+        cv::normalize(bgrChannels[2], bgrChannels[2], 0, 255, cv::NORM_MINMAX);
+
+        // Merge BGR channels back
+        cv::merge(bgrChannels, img);
+
+        // Increase contrast and adjust brightness
+        double alpha = 1.4;  // Contrast gain
+        int beta = -50;      // Brightness offset
+        img.convertTo(img, -1, alpha, beta);
+
+        // Add glow effect
+        cv::Mat glow;
+        cv::GaussianBlur(img, glow, cv::Size(0, 0), 25);
+        cv::addWeighted(img, 1.2, glow, 0.3, 0, img);
+
+        // Sharpen the image
+        cv::Mat kernel = (cv::Mat_<char>(3, 3) << -1, -1, -1,
+            -1, 9, -1,
+            -1, -1, -1);
+        cv::filter2D(img, img, -1, kernel);
+
+        // Save image if output path is provided
+        if (!outputPath.empty()) {
+            cv::imwrite(outputPath, img);
+            LogInfof(logger, "Cyberpunk style image saved to: %s", outputPath.c_str());
+        }
+    }
+    catch (const std::exception& e) {
+        LogErrorf(logger, "Error processing image: %s", e.what());
+        return -2;
+    }
+
+    return 0;
+}

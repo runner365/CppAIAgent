@@ -20,4 +20,7 @@ int ApplyCartoonFilter(const std::string& inputPath, const std::string& outputPa
 // add sun glasses for a person
 int ApplySunGlasses(const std::string& inputPath, const std::string& outputPath, Logger* logger);
 
+// Converts an image to cyberpunk style 
+int ConvertImage2CyberPunkStyle(const std::string& inputPath, const std::string& outputPath, Logger* logger);
+
 #endif

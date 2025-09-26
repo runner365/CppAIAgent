@@ -67,17 +67,19 @@ void ToolsInit(std::shared_ptr<LLMClient> llm_client_ptr) {
 	auto makeup_def = ApplyBeautyFilterFunctionDefinition();
 	auto cartoon_def = ApplyCartoonFilterFunctionDefinition();
 	auto sun_glasses_def = ApplySunGlassesFunctionDefinition();
+	auto cyber_def = ConvertImage2CyberPunkStyleFunctionDefinition();
 
 	llm_client_ptr->AddFunctionTool(weather_def.function.name, weather_def, GetWeather);
 	llm_client_ptr->AddFunctionTool(convert_colorimg_to_grayimg_def.function.name, convert_colorimg_to_grayimg_def, ConvertColorImg2GrayImgTool);
 	llm_client_ptr->AddFunctionTool(makeup_def.function.name, makeup_def, ApplyBeautyFilterTool);
 	llm_client_ptr->AddFunctionTool(cartoon_def.function.name, cartoon_def, ApplyCartoonFilterTool);
 	llm_client_ptr->AddFunctionTool(sun_glasses_def.function.name, sun_glasses_def, ApplySunGlassesTool);
+	llm_client_ptr->AddFunctionTool(cyber_def.function.name, cyber_def, ConvertImage2CyberPunkStyleTool);
 
 	const auto& tool_defs = llm_client_ptr->GetToolDefinitions();
 	std::cout << "Registered Tools:" << std::endl;
 	for (const auto& def : tool_defs) {
-		std::cout << "function name:" << def.function.name << ", description:" << def.function.description << std::endl;
+		std::cout << "tool:" << def.function.name << ", description:" << def.function.description << std::endl;
 	}
 	std::cout << "\r\n";
 }
@@ -113,15 +115,10 @@ int main(int argc, char** argv) {
 
 	bool parse_ok = ParseUrl(llmUrl, isHttps, host, port, subpath);
 	
-	std::cout << "input url:" << llmUrl << "\r\n";
 	if (!parse_ok) {
 		std::cout << "ParseUrl failed, invalid url:" << llmUrl << std::endl;
 		return -1;
 	}
-	std::cout << "Parsed url, isHttps:" << (isHttps ? "true" : "false")
-		<< ", host:" << host
-		<< ", port:" << port
-		<< ", subpath:" << subpath << std::endl;
 
 	char* api_key_env = nullptr;
 	size_t len = 0;
