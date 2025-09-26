@@ -40,6 +40,7 @@ If the repository contains large files, please enable Git LFS before cloning:
 ```
 git lfs install
 git clone https://github.com/runner365/CppAIAgent.git
+cd CppAIAgent
 git lfs pull  # pull large files
 ```
 

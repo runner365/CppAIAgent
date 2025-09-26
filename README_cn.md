@@ -38,6 +38,7 @@ CppAIAgent ÔÊĞíÓÃ»§Í¨¹ı×ÔÈ»ÓïÑÔÃèÊöÓë AI Agent ½»»¥£¬Agent »á×Ô¶¯½âÎöÓÃ»§ÊäÈë²¢Í
 ```
 git lfs install
 git clone https://github.com/runner365/CppAIAgent.git
+cd CppAIAgent
 git lfs pull  # ÏÂÔØ´óÎÄ¼ş
 ```
 
