@@ -1,3 +1,5 @@
+[ÖÐÎÄ](README_cn.md) | [English](README.md)
+
 # CppAIAgent
 
 CppAIAgent is an AI agent platform developed in modern C++20, designed to support extensible tool development. It demonstrates how to build AI-powered applications in C++ by integrating natural language processing and image editing capabilities, using OpenCV as a practical example.
