@@ -1,4 +1,4 @@
-[ÖÐÎÄ](README_cn.md) | [English](README.md)
+[ä¸­æ–‡](README_cn.md) | [English](README.md)
 
 # CppAIAgent
 
