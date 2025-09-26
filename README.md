@@ -1,4 +1,4 @@
-[中文](README_cn.md) | [English](README.md)
+English | [中文](README_cn.md)
 
 # CppAIAgent
 
