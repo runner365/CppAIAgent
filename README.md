@@ -37,7 +37,6 @@ CppAIAgent enables users to interact with the AI agent using natural language de
 
 If the repository contains large files, please enable Git LFS before cloning:
 ```
-```
 git lfs install
 git clone https://github.com/runner365/CppAIAgent.git
 cd CppAIAgent
