@@ -33,6 +33,7 @@ public:
     DataBuffer data_;
     bool header_ready_ = false;
     bool body_ready_   = false;
+    bool chunked_ = false;
 };
 
 class HttpClientCallbackI
@@ -60,10 +61,14 @@ private:
     virtual void OnRead(int ret_code, const char* data, size_t data_size) override;
 
 private:
+	void OnHandleChuckedBody(uint8_t* data, size_t data_len);
+
+private:
     TcpClient* client_ = nullptr;
     std::string host_;
     uint16_t port_ = 0;
     HTTP_METHOD method_ = HTTP_GET;
+	DataBuffer header_buffer_;
     std::map<std::string, std::string> headers_;
     std::string subpath_;
     HttpClientCallbackI* cb_ = nullptr;

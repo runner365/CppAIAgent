@@ -183,4 +183,8 @@
       <Filter>源文件\utils</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="README_cn.md" />
+  </ItemGroup>
 </Project>

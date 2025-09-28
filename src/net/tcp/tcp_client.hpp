@@ -52,14 +52,13 @@ public:
     TcpClient(uv_loop_t* loop,
         TcpClientCallback* callback,
         Logger* logger = nullptr,
-        bool ssl_enable = false) : callback_(callback)
+        bool ssl_enable = false) : loop_(loop)
+                                   , callback_(callback)
                                    , ssl_enable_(ssl_enable)
                                    , logger_(logger)
     {   
         client_  = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
         connect_ = (uv_connect_t*)malloc(sizeof(uv_connect_t));
-
-        uv_tcp_init(loop, client_);
 
         buffer_ = (char*)malloc(buffer_size_);
         if (ssl_enable) {
@@ -97,7 +96,9 @@ public:
         req->buf = uv_buf_init(new_data, (unsigned int)len);
 
         connect_->handle->data = this;
-        if (uv_write((uv_write_t*)req, connect_->handle, &req->buf, 1, OnUVClientWrite)) {
+        int ret = uv_write((uv_write_t*)req, connect_->handle, &req->buf, 1, OnUVClientWrite);
+        if (ret != 0) {
+            LogErrorf(logger_, "uv write error:%s, %d", uv_strerror(ret), ret);
             free(new_data);
             throw CppStreamException("PlaintextDataSend uv_write error");
         }
@@ -122,33 +123,55 @@ public:
             hints.ai_family = AF_UNSPEC;
             hints.ai_socktype = SOCK_STREAM;
 
-            addrinfo* ai  = NULL;
-            LogInfof(logger_, "getaddrinfo host:%s, port:%s, ssl:%s", 
-                    host.c_str(), port_sz, ssl_enable_ ? "true" : "false");
-            if(getaddrinfo(host.c_str(), port_sz, (const addrinfo*)&hints, &ai)) {
+            addrinfo* ai = NULL;
+            LogInfof(logger_, "getaddrinfo host:%s, port:%s, ssl:%s",
+                host.c_str(), port_sz, ssl_enable_ ? "true" : "false");
+            if (getaddrinfo(host.c_str(), port_sz, (const addrinfo*)&hints, &ai)) {
                 throw CppStreamException("get address info error");
             }
-            freeaddrinfo(ai);
-            assert(sizeof(dst_addr_) == ai->ai_addrlen);
 
-            memcpy((void*)&dst_addr_, ai->ai_addr, sizeof(dst_addr_));
-            dst_ip = GetIpStr(ai->ai_addr, dst_port);
+            if (ai != nullptr) {
+				af_family_ = ai->ai_family;
+                if (af_family_ == AF_INET) {
+                    memcpy((void*)&dst_addr_, ai->ai_addr, sizeof(sockaddr_in));
+                    dst_ip = GetIpStr(ai->ai_addr, dst_port);
+                    LogInfof(logger_, "getaddrinfo result:%s:%d, af_family:%d",
+                        dst_ip.c_str(), htons(dst_port), ai->ai_family);
+
+                    uv_tcp_init(loop_, client_);
+                } else if (af_family_ == AF_INET6) {
+					memcpy((void*)&dst_addr_, ai->ai_addr, sizeof(sockaddr_in6));
+                    int ret = uv_tcp_init_ex(loop_, client_, AF_INET6);
+                    if (ret != 0) {
+						LogErrorf(logger_, "uv_tcp_init_ex error:%s, %d", uv_strerror(ret), ret);
+                        freeaddrinfo(ai);
+                        throw CppStreamException("uv_tcp_init_ex error");
+					}
+                } else {
+                    freeaddrinfo(ai);
+                    throw CppStreamException("get address info family error");
+				}
+                freeaddrinfo(ai);
+            }
+            else {
+				throw CppStreamException("get address info null");
+            }
+
         } else {
+            uv_tcp_init(loop_, client_);
             GetIpv4Sockaddr(host, htons(dst_port), (struct sockaddr*)&dst_addr_);
             dst_ip = GetIpStr((sockaddr*)&dst_addr_, dst_port);
+            LogInfof(logger_, "start connect host:%s:%d", dst_ip.c_str(), htons(dst_port));
         }
 
-        //if ((r = uv_ip4_addr(host.c_str(), dst_port, &dst_addr_)) != 0) {
-        //    throw CppStreamException("connect address error");
-        //}
         connect_->data = this;
-        LogInfof(logger_, "start connect host:%s:%d", dst_ip.c_str(), htons(dst_port));
 
         if ((r = uv_tcp_connect(connect_, client_,
-                            (const struct sockaddr*)&dst_addr_,
-                            OnUVClientConnected)) != 0) {
+            (const struct sockaddr*)&dst_addr_,
+            OnUVClientConnected)) != 0) {
             throw CppStreamException("connect address error");
         }
+
         return;
     }
 
@@ -164,7 +187,8 @@ public:
         req->buf = uv_buf_init(new_data, (unsigned int)len);
 
         connect_->handle->data = this;
-        if (uv_write((uv_write_t*)req, connect_->handle, &req->buf, 1, OnUVClientWrite)) {
+        int ret = uv_write((uv_write_t*)req, connect_->handle, &req->buf, 1, OnUVClientWrite);
+        if (ret != 0) {
             free(new_data);
             throw CppStreamException("uv_write error");
         }
@@ -306,7 +330,8 @@ private:
     }
 
 private:
-    struct sockaddr_in dst_addr_;
+    uv_loop_t* loop_ = nullptr;
+    struct sockaddr_storage dst_addr_;
     uv_tcp_t* client_            = nullptr;
     uv_connect_t* connect_       = nullptr;
     TcpClientCallback* callback_ = nullptr;
@@ -315,6 +340,7 @@ private:
     size_t buffer_size_ = 10*1024;
     bool is_connect_    = false;
     bool read_start_    = false;
+	int af_family_ = AF_INET;
 
 private:
     bool ssl_enable_ = false;
@@ -325,6 +351,10 @@ private:
 };
 
 inline void OnUVClientConnected(uv_connect_t *conn, int status) {
+    if (status != 0) {
+        printf("uv connect error:%s, %d.\r\n", uv_strerror(status), status);
+        return;
+    }
     TcpClient* client = (TcpClient*)conn->data;
     if (client) {
         client->OnConnect(status);

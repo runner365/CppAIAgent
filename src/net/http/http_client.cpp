@@ -103,12 +103,15 @@ void HttpClient::OnWrite(int ret_code, size_t sent_size) {
 }
 
 void HttpClient::OnRead(int ret_code, const char* data, size_t data_size) {
+    uint8_t* content_p = nullptr;
+	size_t content_len = 0;
+
     if (ret_code < 0) {
         LogErrorf(logger_, "http client OnRead error:%d, err name:%s, err msg:%s", ret_code, uv_err_name(ret_code), uv_strerror(ret_code));
         cb_->OnHttpRead(ret_code, resp_ptr_);
         return;
     }
-
+	LogInfof(logger_, "http onread:%s", std::string(data, data_size).c_str());
     if (data_size == 0) {
         cb_->OnHttpRead(-2, resp_ptr_);
         return;
@@ -118,16 +121,17 @@ void HttpClient::OnRead(int ret_code, const char* data, size_t data_size) {
         resp_ptr_ = std::make_shared<HttpClientResponse>();
     }
 
-    resp_ptr_->data_.AppendData(data, data_size);
-
     if (!resp_ptr_->header_ready_) {
-        std::string header_str(resp_ptr_->data_.Data(), resp_ptr_->data_.DataLen());
+		header_buffer_.AppendData(data, data_size);
+
+        std::string header_str(header_buffer_.Data(), header_buffer_.DataLen());
         size_t pos = header_str.find("\r\n\r\n");
         if (pos != std::string::npos) {
             std::vector<std::string> lines_vec;
             resp_ptr_->header_ready_ = true;
             header_str = header_str.substr(0, pos);
-            resp_ptr_->data_.ConsumeData((int)pos + 4);
+            content_p = (uint8_t*)data + pos + 4;
+			content_len = data_size - (pos + 4);
 
             StringSplit(header_str, "\r\n", lines_vec);
             for (size_t i = 0; i < lines_vec.size(); i++) {
@@ -161,15 +165,34 @@ void HttpClient::OnRead(int ret_code, const char* data, size_t data_size) {
                     resp_ptr_->content_length_ = atoi(value.c_str());
                     LogInfof(logger_, "http content length:%d", resp_ptr_->content_length_);
                 }
+                if (key == "Transfer-Encoding" && value == "chunked") {
+                    resp_ptr_->chunked_ = true;
+                }
                 resp_ptr_->headers_[key] = value;
                 LogInfof(logger_, "header: %s: %s", key.c_str(), value.c_str());
             }
+            if (!resp_ptr_->chunked_) {
+                resp_ptr_->data_.AppendData((char*)content_p, content_len);
+			}
         } else {
             LogInfof(logger_, "header not ready, read more");
             client_->AsyncRead();
             return;
         }
     }
+    else {
+        if (!resp_ptr_->chunked_) {
+			resp_ptr_->data_.AppendData(data, data_size);
+        }
+        else {
+			OnHandleChuckedBody((uint8_t*)data, data_size);
+            return;
+        }
+    }
+    if (resp_ptr_->chunked_) {
+        OnHandleChuckedBody(content_p, content_len);
+        return;
+	}
 
     if (resp_ptr_->content_length_ > 0) {
         LogInfof(logger_, "http receive data len:%lu, content len:%d",
@@ -186,4 +209,42 @@ void HttpClient::OnRead(int ret_code, const char* data, size_t data_size) {
     }
 }
 
+void HttpClient::OnHandleChuckedBody(uint8_t* data, size_t data_len) {
+    if (!resp_ptr_->chunked_) {
+        return;
+    }
+	uint8_t* p = data;
+	int64_t content_len = (int64_t)data_len;
+
+    while (true) {
+        std::string body_str((char*)p, content_len);
+        size_t pos = body_str.find("\r\n");
+        if (pos == std::string::npos) {
+            LogInfof(logger_, "chunked body not ready, read more");
+            client_->AsyncRead();
+            return;
+        }
+        std::string chunk_size_str = body_str.substr(0, pos);
+        char* endptr = nullptr;
+        int chunk_size = (int)strtol(chunk_size_str.c_str(), &endptr, 16);
+        // 检查是否有合法数字被解析
+        if (endptr == chunk_size_str.c_str() || chunk_size < 0) {
+            break;
+        }
+        if (chunk_size == 0) {
+            resp_ptr_->body_ready_ = true;
+            cb_->OnHttpRead(0, resp_ptr_);
+            return;
+        }
+		p += pos + 2;
+		content_len -= (int64_t)(pos + 2);
+
+		resp_ptr_->data_.AppendData((char*)p, (size_t)chunk_size);
+
+		std::string content_str(resp_ptr_->data_.Data(), resp_ptr_->data_.DataLen());
+		LogInfof(logger_, "chunked body size:%d, content:%s", chunk_size, content_str.c_str());
+        // resp_ptr_->data_.ConsumeData(chunk_size);
+        // resp_ptr_->data_.ConsumeData(2); //\r\n
+	}
+}
 }

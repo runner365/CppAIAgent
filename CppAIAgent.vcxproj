@@ -185,6 +185,10 @@
     <ClCompile Include="src\utils\timeex.cpp" />
     <ClCompile Include="src\utils\url.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="README_cn.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

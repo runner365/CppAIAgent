@@ -95,7 +95,7 @@ FunctionResult ConvertColorImg2GrayImgTool(std::map<std::string, LLMValue> input
 
 	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() %100000) + ".jpg";
 
-	int proc_ret = ConvertColorImg2GrayImg(src_filename.c_str(), dst_img_url.c_str(), logger);
+	int proc_ret = ConvertColorImg2GrayImg(src_url.c_str(), dst_img_url.c_str(), logger);
 	if (proc_ret < 0) {
 		LogErrorf(logger, "ConvertColorImg2GrayImg failed for src: %s", src_filename.c_str());
 		FunctionResult error_result;
@@ -166,7 +166,7 @@ FunctionResult ApplyBeautyFilterTool(std::map<std::string, LLMValue> input_args,
 	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() % 100000) + ".jpg";
 	float smoothStrength = 0.5f;
 
-	int proc_ret = ApplyBeautyFilter(src_filename, dst_img_url, smoothStrength, logger);
+	int proc_ret = ApplyBeautyFilter(src_url, dst_img_url, smoothStrength, logger);
 	if (proc_ret < 0) {
 		LogErrorf(logger, "ApplyBeautyFilter failed for src: %s", src_filename.c_str());
 		FunctionResult error_result;
@@ -231,7 +231,7 @@ FunctionResult ApplyCartoonFilterTool(std::map<std::string, LLMValue> input_args
 	}
 	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() % 100000) + ".jpg";
 
-	int proc_ret = ApplyCartoonFilter(src_filename, dst_img_url, logger);
+	int proc_ret = ApplyCartoonFilter(src_url, dst_img_url, logger);
 	if (proc_ret < 0) {
 		LogErrorf(logger, "ApplyCartoonFilter failed for src: %s", src_filename.c_str());
 		FunctionResult error_result;
@@ -294,7 +294,7 @@ FunctionResult ApplySunGlassesTool(std::map<std::string, LLMValue> input_args, L
 		return error_result;
 	}
 	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() % 100000) + ".png";
-	int proc_ret = ApplySunGlasses(src_filename, dst_img_url, logger);
+	int proc_ret = ApplySunGlasses(src_url, dst_img_url, logger);
 	if (proc_ret < 0) {
 		LogErrorf(logger, "ApplySunGlasses failed for src: %s", src_filename.c_str());
 		FunctionResult error_result;
@@ -358,7 +358,7 @@ FunctionResult ConvertImage2CyberPunkStyleTool(std::map<std::string, LLMValue> i
 		return error_result;
 	}
 	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() % 100000) + ".jpg";
-	int proc_ret = ConvertImage2CyberPunkStyle(src_filename, dst_img_url, logger);
+	int proc_ret = ConvertImage2CyberPunkStyle(src_url, dst_img_url, logger);
 	if (proc_ret < 0) {
 		LogErrorf(logger, "ConvertImage2CyberPunkStyle failed for src: %s", src_filename.c_str());
 		FunctionResult error_result;

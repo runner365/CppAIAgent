@@ -101,6 +101,8 @@ void SetupTerminal() {
 }
 
 int main(int argc, char** argv) {
+	//std::string llmUrl = "https://api.hunyuan.cloud.tencent.com/v1/chat/completions";
+	//std::string model_name = "hunyuan-turbo";
 	std::string llmUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
 	std::string model_name = "qwen-plus";
 
@@ -128,10 +130,11 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 
-
 	std::shared_ptr<Logger> logger_ptr = std::make_shared<Logger>("aiagent.log", LOGGER_INFO_LEVEL);
 	logger_ptr->DisableConsole();
-
+	
+	LogInfof(logger_ptr.get(), "llm url:%s, host:%s, port:%d, subpath:%s, key:%s",
+		llmUrl.c_str(), host.c_str(), port, subpath.c_str(), api_key_env);
 	LLMClient::Init(uv_default_loop(), logger_ptr.get());
 
 	std::shared_ptr<LLMClient> llm_client_ptr = std::make_shared<LLMClient>(uv_default_loop(), model_name, host, port, api_key_env, subpath, logger_ptr.get());
