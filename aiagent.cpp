@@ -10,6 +10,7 @@
 #include <string>
 #include <thread>
 #include <opencv2/opencv.hpp>
+#include <iomanip>
 
 using namespace cv;
 
@@ -78,8 +79,19 @@ void ToolsInit(std::shared_ptr<LLMClient> llm_client_ptr) {
 
 	const auto& tool_defs = llm_client_ptr->GetToolDefinitions();
 	std::cout << "Registered Tools:" << std::endl;
+	size_t max_name_len = 0;
+	for (const auto & def : tool_defs) {
+		if (def.function.name.length() > max_name_len) {
+			max_name_len = def.function.name.length();
+		}
+	}
+
 	for (const auto& def : tool_defs) {
-		std::cout << "tool:" << def.function.name << ", description:" << def.function.description << std::endl;
+
+		std::cout << "tool:"
+			<< std::left << std::setw(max_name_len) << def.function.name
+			<< " desc:" << def.function.description
+			<< "\r\n";
 	}
 	std::cout << "\r\n";
 }
@@ -109,6 +121,7 @@ int main(int argc, char** argv) {
 	SetupTerminal();
 
 	std::cout << "OpenCV version:" << CV_VERSION << std::endl;
+	cv::utils::logging::setLogLevel(cv::utils::logging::LOG_LEVEL_WARNING);
 
 	bool isHttps = false;
 	std::string host;

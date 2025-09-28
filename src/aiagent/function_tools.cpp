@@ -164,7 +164,7 @@ FunctionResult ApplyBeautyFilterTool(std::map<std::string, LLMValue> input_args,
 	}
 
 	std::string dst_img_url = src_dir + "/output_" + std::to_string(now_millisec() % 100000) + ".jpg";
-	float smoothStrength = 0.5f;
+	float smoothStrength = 0.4f;
 
 	int proc_ret = ApplyBeautyFilter(src_url, dst_img_url, smoothStrength, logger);
 	if (proc_ret < 0) {

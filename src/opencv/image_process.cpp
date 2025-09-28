@@ -32,45 +32,66 @@ int ConvertColorImg2GrayImg(const char* inputPath, const char* outputPath, Logge
 
 // Beauty filter function: Implements skin smoothing and wrinkle reduction
 int ApplyBeautyFilter(const std::string& inputPath, const std::string& outputPath, float smoothStrength, Logger* logger) {
-    // 1. Load input image (using C++ interface's imread)
+    // 1. Read the input image
     cv::Mat src = cv::imread(inputPath);
     if (src.empty()) {
-		LogErrorf(logger, "Failed to load image: %s", inputPath.c_str());
+        LogErrorf(logger, "Failed to load image: %s", inputPath.c_str());
         return -1;
     }
 
-    // 2. Create intermediate variables (using cv::Mat instead of IplImage)
-    cv::Mat gray, mask, smoothed, temp;
+    // 2. Skin region detection (simple skin color mask, more advanced methods can be used in practice)
+    cv::Mat ycrcb, skinMask;
+    cv::cvtColor(src, ycrcb, cv::COLOR_BGR2YCrCb);
+    cv::inRange(ycrcb, cv::Scalar(0, 133, 77), cv::Scalar(255, 173, 127), skinMask);
+    cv::GaussianBlur(skinMask, skinMask, cv::Size(5, 5), 0);
 
-    // 3. Convert to grayscale for edge detection (to preserve important features)
-    cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
+    // 3. Bilateral filtering (skin smoothing, preserves edges)
+    int d = cvRound(8 + smoothStrength * 10);
+    double sigmaColor = 50 + smoothStrength * 50;
+    double sigmaSpace = 20 + smoothStrength * 20;
+    cv::Mat bilateral;
+    cv::bilateralFilter(src, bilateral, d, sigmaColor, sigmaSpace);
 
-    // 4. Edge detection and mask generation (protects eyebrows, eyes, lips, etc.)
-    cv::Canny(gray, mask, 30, 90);                // Detect edges
-    cv::threshold(mask, mask, 10, 255, cv::THRESH_BINARY_INV);  // Invert mask (non-edge areas will be smoothed)
-    cv::GaussianBlur(mask, mask, cv::Size(5, 5), 0);  // Soften mask edges to avoid harsh transitions
+    // 4. High-pass filtering (enhance details, prevent loss of facial features)
+    cv::Mat gaussian, highpass;
+    int ksize = cvRound(3 + smoothStrength * 4) | 1;
+    cv::GaussianBlur(src, gaussian, cv::Size(ksize, ksize), 0);
+    cv::addWeighted(src, 1.5, gaussian, -0.5, 0, highpass);
 
-    // 5. Bilateral filtering (core skin smoothing algorithm: smooths skin while preserving edges)
-    int d = cvRound(5 + smoothStrength * 10);  // Diameter of pixel neighborhood
-    double sigmaColor = 100 + smoothStrength * 50;  // Color similarity sigma
-    double sigmaSpace = 30 + smoothStrength * 20;   // Spatial similarity sigma
-    cv::bilateralFilter(src, temp, d, sigmaColor, sigmaSpace);
-
-    // 6. Gaussian blur to enhance wrinkle reduction
-    int ksize = cvRound(3 + smoothStrength * 4) | 1;  // Ensure kernel size is odd
-    cv::GaussianBlur(temp, smoothed, cv::Size(ksize, ksize), 0);
-
-    // 7. Image blending (merge smoothed areas with original facial features)
-    src.copyTo(temp);  // Copy original image to temporary variable
-    smoothed.copyTo(temp, mask);  // Apply smoothing only to non-edge areas
-
-    // 8. Save result
-    if (!cv::imwrite(outputPath, temp)) {
-		LogErrorf(logger, "Failed to save output image: %s", outputPath.c_str());
-        return -2;
+    // 5. Blending: apply smoothing + high-pass only to skin regions, keep original for non-skin regions
+    cv::Mat beauty = src.clone();
+    for (int y = 0; y < src.rows; ++y) {
+        for (int x = 0; x < src.cols; ++x) {
+            if (skinMask.at<uchar>(y, x) > 128) {
+                // Blend smoothing and high-pass
+                cv::Vec3b b = bilateral.at<cv::Vec3b>(y, x);
+                cv::Vec3b h = highpass.at<cv::Vec3b>(y, x);
+                // 0.7 weight for smoothing, 0.3 for details
+                beauty.at<cv::Vec3b>(y, x) = cv::Vec3b(
+                    cv::saturate_cast<uchar>(b[0] * 0.7 + h[0] * 0.3),
+                    cv::saturate_cast<uchar>(b[1] * 0.7 + h[1] * 0.3),
+                    cv::saturate_cast<uchar>(b[2] * 0.7 + h[2] * 0.3)
+                );
+            }
+        }
     }
 
-	LogInfof(logger, "Beauty filter applied successfully, output saved to: %s", outputPath.c_str());
+    // 6. Whitening and brightening (increase brightness and slight whitening)
+    cv::Mat hsv;
+    cv::cvtColor(beauty, hsv, cv::COLOR_BGR2HSV);
+    std::vector<cv::Mat> hsvChannels;
+    cv::split(hsv, hsvChannels);
+    hsvChannels[1] = hsvChannels[1] * (0.95 - 0.2 * smoothStrength); // Lower saturation for whiter skin
+    hsvChannels[2] = hsvChannels[2] * (1.08 + 0.2 * smoothStrength); // Increase brightness
+    cv::merge(hsvChannels, hsv);
+    cv::cvtColor(hsv, beauty, cv::COLOR_HSV2BGR);
+
+    // 7. Save the result
+    if (!cv::imwrite(outputPath, beauty)) {
+        LogErrorf(logger, "Failed to save output image: %s", outputPath.c_str());
+        return -2;
+    }
+    LogInfof(logger, "Beauty filter applied successfully, output saved to: %s", outputPath.c_str());
     return 0;
 }
 
